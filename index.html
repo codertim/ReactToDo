@@ -17,7 +17,6 @@
             var testing = "Blah Blah Blah";
             var myTasks = [1, 9, 15];
 
-
             var AllTasks = React.createClass({
                 getInitialState: function() {
                     return {
@@ -37,19 +36,71 @@
             });
 
 
+            var RemoveTasks = React.createClass({
+                getInitialState: function() {
+                    return {
+                        tasksCanRemove: <div>Hey There</div>
+                    };
+                },
+                componentDidMount: function() {
+                    console.log("RemoveTasks - component did mount - this.tasksCanRemove=", this.tasksCanRemove);
+                    console.log("RemoveTasks - component did mount - this.props.theTasks=", this.props.theTasks);
+                    this.setState({tasksCanRemove: this.props.theTasks.map( (val) => 
+                        <div key={val} onClick={this.handleDelete}>{val}</div>
+                    )});
+                    console.log("RemoveTasks - component did mount - this.tasksCanRemove=", this.tasksCanRemove);
+                },
+                handleDelete: function(e) {
+                    console.log("Deleting ...");
+                    console.log("Deleting e= ", e);
+                    console.log("Deleting e.target = ", e.target);
+                    console.log("Deleting e.target.value = ", e.target.value);
+                    console.log("Deleting e.target.innerHTML = |" + e.target.innerHTML + "|");
+                    console.log("Deleting myTasks =", myTasks);
+                    const taskToDelete = e.target.innerHTML;
+                    this.props.handleDelete(taskToDelete);
+                },
+                render: function() {
+                    return (
+                        <div id="removeTasks">
+                            Remove tasks
+                            <br />
+                            {this.state.tasksCanRemove} 
+                        </div>
+                    );
+                }
+            });
+
             var NewTaskBox = React.createClass({
                 getInitialState: function() {
                     return { currentTasks: ["Bills", "Groceries"]};
                 },
                 handleMyChange: function(event) {
-                    // alert("In handleChange!!! - this.props.someTasks = " + JSON.stringify(this.props.someTasks));
                     console.log("myTasks= " + JSON.stringify(myTasks));
                     console.log("this.state.currentTasks= " + JSON.stringify(this.state.currentTasks));
                     var newTaskValue = document.getElementById("newtask").value;
-                    this.setState({
-                        currentTasks: this.state.currentTasks.concat([newTaskValue])
-                    });
                     document.getElementById("newtask").value = "";
+
+                    if(newTaskValue) {
+                        this.setState({
+                            currentTasks: this.state.currentTasks.concat([newTaskValue])
+                        });
+                    }
+                },
+                componentDidMount: function() {
+                    console.log("NewTaskBox mounted.");
+                },
+                parentHandleDelete: function(taskToDelete) {
+                    alert("Parent delete handler - val = " + taskToDelete);
+                    var delIndex = this.state.currentTasks.indexOf(taskToDelete);
+                    console.log("Deleting - delIndex  = ", delIndex);
+                    const newTaskList = [];
+                    for(let i = 0, len = this.state.currentTasks.length; i < len; i++) {
+                        if(i != delIndex) {
+                            newTaskList.push(this.state.currentTasks[i]);
+                        }
+                    }
+                    this.setState({currentTasks: newTaskList});
                 },
                 render: function() {
                     return (
@@ -57,6 +108,8 @@
                             <AllTasks someTasks={this.state.currentTasks} />
                             Enter New Task: <input type="text" name="newtask" id="newtask" />
                             <button id="addnewtask" onClick={this.handleMyChange}>Add</button>
+                            <br /><br /><br />
+                            <RemoveTasks theTasks={this.state.currentTasks} handleDelete={this.parentHandleDelete} />
                         </div>
                     );
                 }
@@ -67,7 +120,7 @@
                 render: function() {
                     return (
                         <div>
-                            <h2>To-Do List in React!</h2>
+                            <h2>To-Do List in React #5,231,792!</h2>
                             <NewTaskBox someTasks={myTasks} />
                         </div>
                     );
