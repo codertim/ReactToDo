@@ -69,23 +69,36 @@
             });
 
             var NewTaskBox = React.createClass({
-                getInitialState: function() {
-                    return { currentTasks: ["Bills", "Groceries", "Toys"]};
-                },
                 handleMyChange: function(event) {
-                    console.log("myTasks= " + JSON.stringify(myTasks));
-                    console.log("this.state.currentTasks= " + JSON.stringify(this.state.currentTasks));
+                    // console.log("myTasks= " + JSON.stringify(myTasks));
+                    // console.log("this.state.currentTasks= " + JSON.stringify(this.state.currentTasks));
                     var newTaskValue = document.getElementById("newtask").value;
                     document.getElementById("newtask").value = "";
 
                     if(newTaskValue) {
                         this.setState({
-                            currentTasks: this.state.currentTasks.concat([newTaskValue])
+                            // currentTasks: this.state.currentTasks.concat([newTaskValue])
                         });
                     }
                 },
                 componentDidMount: function() {
                     console.log("NewTaskBox mounted.");
+                },
+                render: function() {
+                    return (
+                        <div className="newTaskBox">
+                            Enter New Task: <input type="text" name="newtask" id="newtask" />
+                            <button id="addnewtask" onClick={this.handleMyChange}>Add</button>
+                            <br /><br /><br />
+                        </div>
+                    );
+                }
+            });
+
+
+            var ToDo = React.createClass({
+                getInitialState: function() {
+                    return { currentTasks: ["Bills", "Groceries", "Toys"]};
                 },
                 parentHandleDelete: function(taskToDelete) {
                     alert("Parent delete handler - val = " + taskToDelete);
@@ -101,24 +114,11 @@
                 },
                 render: function() {
                     return (
-                        <div className="newTaskBox">
-                            <AllTasks someTasks={this.state.currentTasks} />
-                            Enter New Task: <input type="text" name="newtask" id="newtask" />
-                            <button id="addnewtask" onClick={this.handleMyChange}>Add</button>
-                            <br /><br /><br />
-                            <RemoveTasks theTasks={this.state.currentTasks} handleDelete={this.parentHandleDelete} />
-                        </div>
-                    );
-                }
-            });
-
-
-            var ToDo = React.createClass({
-                render: function() {
-                    return (
                         <div>
                             <h2>To-Do List in React</h2>
-                            <NewTaskBox someTasks={myTasks} />
+                            <AllTasks someTasks={this.state.currentTasks} />
+                            <NewTaskBox />
+                            <RemoveTasks theTasks={this.state.currentTasks} handleDelete={this.parentHandleDelete} />
                         </div>
                     );
                 }
@@ -131,3 +131,5 @@
         </script>
     </body>
 </html>
+
+
