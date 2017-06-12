@@ -39,23 +39,19 @@
             var RemoveTasks = React.createClass({
                 getInitialState: function() {
                     return {
-                        tasksCanRemove: <div>Hey There</div>
+                        tasksCanRemove: []
                     };
                 },
                 componentDidMount: function() {
-                    console.log("RemoveTasks - component did mount - this.tasksCanRemove=", this.tasksCanRemove);
+                    console.log("RemoveTasks - component did mount - this.tasksCanRemove=", this.state.tasksCanRemove);
                     console.log("RemoveTasks - component did mount - this.props.theTasks=", this.props.theTasks);
                     this.setState({tasksCanRemove: this.props.theTasks.map( (val) => 
-                        <div key={val} onClick={this.handleDelete}>{val}</div>
+                        <div><span key={val} onClick={this.removeTaskHandleDelete}>{val}</span></div>
                     )});
-                    console.log("RemoveTasks - component did mount - this.tasksCanRemove=", this.tasksCanRemove);
+                    console.log("RemoveTasks - component did mount - this.tasksCanRemove=", this.state.tasksCanRemove);
                 },
-                handleDelete: function(e) {
-                    console.log("Deleting ...");
+                removeTaskHandleDelete: function(e) {
                     console.log("Deleting e= ", e);
-                    console.log("Deleting e.target = ", e.target);
-                    console.log("Deleting e.target.value = ", e.target.value);
-                    console.log("Deleting e.target.innerHTML = |" + e.target.innerHTML + "|");
                     console.log("Deleting myTasks =", myTasks);
                     const taskToDelete = e.target.innerHTML;
                     this.props.handleDelete(taskToDelete);
@@ -63,7 +59,8 @@
                 render: function() {
                     return (
                         <div id="removeTasks">
-                            Remove tasks
+                            <hr />
+                            :: Remove tasks
                             <br />
                             {this.state.tasksCanRemove} 
                         </div>
@@ -73,7 +70,7 @@
 
             var NewTaskBox = React.createClass({
                 getInitialState: function() {
-                    return { currentTasks: ["Bills", "Groceries"]};
+                    return { currentTasks: ["Bills", "Groceries", "Toys"], misc: ["Blah", "Blah", "Blah"]};
                 },
                 handleMyChange: function(event) {
                     console.log("myTasks= " + JSON.stringify(myTasks));
@@ -109,6 +106,7 @@
                             Enter New Task: <input type="text" name="newtask" id="newtask" />
                             <button id="addnewtask" onClick={this.handleMyChange}>Add</button>
                             <br /><br /><br />
+                            <p>Notes: {this.state.misc}</p>
                             <RemoveTasks theTasks={this.state.currentTasks} handleDelete={this.parentHandleDelete} />
                         </div>
                     );
@@ -120,7 +118,7 @@
                 render: function() {
                     return (
                         <div>
-                            <h2>To-Do List in React #5,231,792!</h2>
+                            <h2>To-Do List in React</h2>
                             <NewTaskBox someTasks={myTasks} />
                         </div>
                     );
