@@ -70,7 +70,7 @@
 
             var NewTaskBox = React.createClass({
                 getInitialState: function() {
-                    return { currentTasks: ["Bills", "Groceries", "Toys"], misc: ["Blah", "Blah", "Blah"]};
+                    return { currentTasks: ["Bills", "Groceries", "Toys"]};
                 },
                 handleMyChange: function(event) {
                     console.log("myTasks= " + JSON.stringify(myTasks));
@@ -106,7 +106,6 @@
                             Enter New Task: <input type="text" name="newtask" id="newtask" />
                             <button id="addnewtask" onClick={this.handleMyChange}>Add</button>
                             <br /><br /><br />
-                            <p>Notes: {this.state.misc}</p>
                             <RemoveTasks theTasks={this.state.currentTasks} handleDelete={this.parentHandleDelete} />
                         </div>
                     );
