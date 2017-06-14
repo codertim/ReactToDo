@@ -45,9 +45,10 @@
                 componentDidMount: function() {
                     console.log("RemoveTasks - component did mount - this.tasksCanRemove=", this.state.tasksCanRemove);
                     console.log("RemoveTasks - component did mount - this.props.theTasks=", this.props.theTasks);
-                    this.setState({tasksCanRemove: this.props.theTasks.map( (val) => 
-                        <div><span key={val} onClick={this.removeTaskHandleDelete}>{val}</span></div>
-                    )});
+                    // this.setState({tasksCanRemove: this.props.theTasks.map( (val) => 
+                    //     <div><span key={val} onClick={this.removeTaskHandleDelete}>{val}</span></div>
+                    // )});
+                    this.setState({ tasksCanRemove: this.props.theTasks.map( (val) => val)});
                     console.log("RemoveTasks - component did mount - this.tasksCanRemove=", this.state.tasksCanRemove);
                 },
                 removeTaskHandleDelete: function(e) {
@@ -56,13 +57,30 @@
                     const taskToDelete = e.target.innerHTML;
                     this.props.handleDelete(taskToDelete);
                 },
+                handleRemoveTask: function() {
+                    var taskToDelete = document.getElementById("delete-drop-down").value;
+                    var indexToDelete = this.state.tasksCanRemove.indexOf(taskToDelete);
+                    alert("indexToDelete:" + (indexToDelete || ""));
+                    var newTaskList = this.state.tasksCanRemove.slice(0, indexToDelete).concat(this.state.tasksCanRemove.slice(indexToDelete + 1));
+                    console.log("newTaskList:", newTaskList);
+                    this.setState({ tasksCanRemove: newTaskList }); 
+                },
                 render: function() {
                     return (
                         <div id="removeTasks">
                             <hr />
                             :: Remove tasks
                             <br />
-                            {this.state.tasksCanRemove} 
+                            { this.state.tasksCanRemove }
+
+                            <select id="delete-drop-down">
+                                {
+                                    this.state.tasksCanRemove.map(function(val) {
+                                        return <option key={val}>{val}</option>
+                                    })
+                                }
+                            </select>
+                            <button id='delete-button' onClick={this.handleRemoveTask}>Remove</button>
                         </div>
                     );
                 }
