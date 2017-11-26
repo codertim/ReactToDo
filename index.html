@@ -51,19 +51,20 @@
                     this.setState({ tasksCanRemove: this.props.theTasks.map( (val) => val)});
                     console.log("RemoveTasks - component did mount - this.tasksCanRemove=", this.state.tasksCanRemove);
                 },
-                removeTaskHandleDelete: function(e) {
-                    console.log("Deleting e= ", e);
-                    console.log("Deleting myTasks =", myTasks);
-                    const taskToDelete = e.target.innerHTML;
-                    this.props.handleDelete(taskToDelete);
-                },
+                // removeTaskHandleDelete: function(e) {
+                //     console.log("Deleting e= ", e);
+                //     console.log("Deleting myTasks =", myTasks);
+                //     const taskToDelete = e.target.innerHTML;
+                //     this.props.handleDelete(taskToDelete);
+                // },
                 handleRemoveTask: function() {
                     var taskToDelete = document.getElementById("delete-drop-down").value;
                     var indexToDelete = this.state.tasksCanRemove.indexOf(taskToDelete);
                     alert("indexToDelete:" + (indexToDelete || ""));
                     var newTaskList = this.state.tasksCanRemove.slice(0, indexToDelete).concat(this.state.tasksCanRemove.slice(indexToDelete + 1));
                     console.log("newTaskList:", newTaskList);
-                    this.setState({ tasksCanRemove: newTaskList }); 
+                    this.setState({ tasksCanRemove: newTaskList });
+                    this.props.handleDelete(taskToDelete);   // notify parent
                 },
                 render: function() {
                     return (
@@ -80,11 +81,12 @@
                                     })
                                 }
                             </select>
-                            <button id='delete-button' onClick={this.handleRemoveTask}>Remove</button>
+			    <button id='delete-button' onClick={this.handleRemoveTask}>Remove</button> 
                         </div>
                     );
                 }
             });
+                            // <button id='delete-button' onClick={this.props.handleDelete()}>Remove</button>
 
             var NewTaskBox = React.createClass({
                 handleMyChange: function(event) {
@@ -128,6 +130,7 @@
                             newTaskList.push(this.state.currentTasks[i]);
                         }
                     }
+                    console.log("parentHandleDelete - newTaskList:", newTaskList);
                     this.setState({currentTasks: newTaskList});
                 },
                 render: function() {
