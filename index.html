@@ -16,6 +16,7 @@
         <script type="text/jsx">
             var testing = "Blah Blah Blah";
             var myTasks = [1, 9, 15];
+	    var theTasks = ["Blah 1", "Blah 2", "Blah 3"];
 
             var AllTasks = React.createClass({
                 getInitialState: function() {
@@ -27,8 +28,8 @@
                     return (
                         <div className="allTasks">
                             <hr />
-                            Current Tasks: <br />
-                            { this.props.someTasks.join(", ") }
+                            All Current Tasks: <br />
+                            { this.props.someTasks.join(" | ") }
                             <hr />
                         </div>
                     );
@@ -81,7 +82,7 @@
                                     })
                                 }
                             </select>
-			    <button id='delete-button' onClick={this.handleRemoveTask}>Remove</button> 
+			    <button id='delete-button' onClick={this.handleRemoveTask} style={{marginLeft: '20px'}}>Remove</button> 
                         </div>
                     );
                 }
@@ -90,15 +91,19 @@
 
             var NewTaskBox = React.createClass({
                 handleMyChange: function(event) {
-                    // console.log("myTasks= " + JSON.stringify(myTasks));
+                    console.log("NewTaskBox - handleMyChange - myTasks= " + JSON.stringify(myTasks));
+                    console.log("NewTaskBox - handleMyChange - theTasks= " + JSON.stringify(theTasks));
                     // console.log("this.state.currentTasks= " + JSON.stringify(this.state.currentTasks));
                     var newTaskValue = document.getElementById("newtask").value;
                     document.getElementById("newtask").value = "";
 
+
                     if(newTaskValue) {
-                        this.setState({
-                            // currentTasks: this.state.currentTasks.concat([newTaskValue])
-                        });
+		        theTasks.push(newTaskValue);
+		        this.props.myTasksChanged(theTasks);
+                        //this.setState({
+                        //   currentTasks: this.state.currentTasks.concat([newTaskValue])
+                        //});
                     }
                 },
                 componentDidMount: function() {
@@ -108,7 +113,7 @@
                     return (
                         <div className="newTaskBox">
                             Enter New Task: <input type="text" name="newtask" id="newtask" />
-                            <button id="addnewtask" onClick={this.handleMyChange}>Add</button>
+			    <button id="addnewtask" onClick={this.handleMyChange} style={{marginLeft: "10px"}}>Add</button>
                             <br /><br /><br />
                         </div>
                     );
@@ -118,7 +123,8 @@
 
             var ToDo = React.createClass({
                 getInitialState: function() {
-                    return { currentTasks: ["Bills", "Groceries", "Toys"]};
+                    //return { currentTasks: ["Bills", "Groceries", "Toys"]};
+                    return { currentTasks: theTasks};
                 },
                 parentHandleDelete: function(taskToDelete) {
                     alert("Parent delete handler - val = " + taskToDelete);
@@ -133,12 +139,17 @@
                     console.log("parentHandleDelete - newTaskList:", newTaskList);
                     this.setState({currentTasks: newTaskList});
                 },
+                handleMyTasksChanged: function(newTasks) {
+                    /// theTasks = newTasks;
+                    this.setState({currentTasks: newTasks});
+                    /// alert("ToDo - handleMyTaskschanged");
+                },
                 render: function() {
                     return (
                         <div>
                             <h2>To-Do List in React</h2>
                             <AllTasks someTasks={this.state.currentTasks} />
-                            <NewTaskBox />
+			    <NewTaskBox myTasksChanged={this.handleMyTasksChanged} />
                             <RemoveTasks theTasks={this.state.currentTasks} handleDelete={this.parentHandleDelete} />
                         </div>
                     );
