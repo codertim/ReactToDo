@@ -28,9 +28,10 @@
                     return (
                         <div className="allTasks">
                             <hr />
-                            All Current Tasks: <br />
-                            { this.props.someTasks.join(" | ") }
-                            <hr />
+			    <div style={ {fontStyle: 'italic'} }>All Current Tasks:</div>
+			    <section style={ { marginBottom: '25px', paddingLeft: '50px'} }>
+			        { this.props.someTasks.map((value, i) => <div key={i} >{value}</div>) }
+			    </section>
                         </div>
                     );
                 }
